@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Give – RCCG Wonderful Mega</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="page-transition">
+
+  <!-- PRELOADER -->
+    <div id="preloader">
+    <img src="logo.png" alt="RCCG Wonderful Mega" class="preloader-logo" />
+    <p class="preloader-text">RCCG Wonderful Mega Church</p>
+  </div>
+
+  <!-- HEADER -->
+  <header id="header">
+    <nav class="navbar container">
+            <a href="index.html" class="logo">
+        <img src="logo.png" alt="RCCG Wonderful Mega" class="logo-img" />
+        <span class="logo-text">
+          <span class="logo-top">Rccg Wonderful</span>
+          <span class="logo-bottom">Mega Church</span>
+        </span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html"   class="nav-link ">Home</a></li>
+        <li><a href="about.html"   class="nav-link ">About</a></li>
+        <li><a href="sermons.html" class="nav-link ">Sermons</a></li>
+        <li><a href="events.html"  class="nav-link ">Events</a></li>
+        <li><a href="give.html"    class="nav-link active">Give</a></li>
+        <li><a href="contact.html" class="nav-link ">Contact</a></li>
+      </ul>
+      <a href="about.html" class="btn btn-gold nav-cta">Join Us This Sunday</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <span class="theme-icon theme-icon-moon">🌙</span>
+        <span class="theme-icon theme-icon-sun">☀️</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1800&q=80" alt="Give" />
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="container page-hero-content">
+        <p class="section-eyebrow light">Sow a Seed</p>
+      <h1 class="page-hero-title fade-up delay-1">Give <em>Online</em></h1>
+      <div class="page-breadcrumb fade-up delay-2">
+        <a href="index.html">Home</a> <span>›</span> <span>Give</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="give section-pad bg-cream">
+    <div class="container">
+      <div class="give-inner">
+        <div class="give-text reveal reveal-left">
+          <p class="section-eyebrow">Support the Kingdom</p>
+          <h2 class="section-title">Give to <em>God's Work</em></h2>
+          <p class="give-desc">Your generous giving makes it possible for us to continue spreading the Gospel, running our ministries, and transforming lives across Nigeria and beyond. Every gift is a seed of faith.</p>
+          <blockquote class="give-verse">"Give, and it will be given to you — a good measure, pressed down, shaken together and running over." — Luke 6:38</blockquote>
+          <div class="give-ways-list">
+            <div class="give-way-item"><i class="fa-solid fa-check-circle"></i><span>Your giving funds missions and evangelism</span></div>
+            <div class="give-way-item"><i class="fa-solid fa-check-circle"></i><span>Supports children and youth programs</span></div>
+            <div class="give-way-item"><i class="fa-solid fa-check-circle"></i><span>Helps the needy in our community</span></div>
+            <div class="give-way-item"><i class="fa-solid fa-check-circle"></i><span>Maintains and grows our church facilities</span></div>
+          </div>
+        </div>
+        <div class="give-options reveal reveal-right">
+          <div class="give-card">
+            <div class="give-card-icon"><i class="fa-solid fa-building-columns"></i></div>
+            <h3>Bank Transfer</h3>
+            <p><strong>Bank:</strong> First Bank<br /><strong>Account No:</strong> 1234567890<br /><strong>Name:</strong> RCCG Wonderful Mega Church</p>
+            <button class="btn btn-purple" id="copyAccBtn">Copy Account Number <i class="fa-solid fa-copy"></i></button>
+          </div>
+          <div class="give-card">
+            <div class="give-card-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <h3>Give via WhatsApp</h3>
+            <p>Reach out to us directly on WhatsApp to confirm your offering or tithe transfer.</p>
+            <a href="https://wa.me/2348134185707?text=Hello%2C%20I%20want%20to%20give%20an%20offering%2FTithe." target="_blank" class="btn btn-whatsapp">Chat to Give <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="give-card">
+            <div class="give-card-icon"><i class="fa-solid fa-receipt"></i></div>
+            <h3>Notify Us of Your Giving</h3>
+            <p>Already sent your transfer? Let us know so we can confirm and keep a record on our end.</p>
+            <button type="button" class="btn btn-purple" id="openGiveModalBtn">Log My Giving <i class="fa-solid fa-pen"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GIVING NOTIFICATION MODAL -->
+  <div class="reg-modal-overlay" id="giveModalOverlay">
+    <div class="reg-modal">
+      <button class="reg-modal-close" id="giveModalClose" aria-label="Close">&times;</button>
+      <h3 class="reg-modal-title">Log Your Giving</h3>
+      <form id="giveForm">
+        <div class="form-group">
+          <label for="giveFullName">Full Name</label>
+          <input type="text" id="giveFullName" placeholder="Your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="givePhone">Phone Number</label>
+          <input type="tel" id="givePhone" placeholder="+234 800 000 0000" required />
+        </div>
+        <div class="form-group">
+          <label for="giveEmail">Email (optional)</label>
+          <input type="email" id="giveEmail" placeholder="you@example.com" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="giveType">Giving Type</label>
+            <select id="giveType" required>
+              <option value="tithe">Tithe</option>
+              <option value="offering" selected>Offering</option>
+              <option value="missions">Missions</option>
+              <option value="building_fund">Building Fund</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="giveAmount">Amount (₦, optional)</label>
+            <input type="number" id="giveAmount" placeholder="5000" min="0" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="giveNote">Reference / Note (optional)</label>
+          <textarea id="giveNote" rows="2" placeholder="e.g. transfer reference number"></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold full-width" id="giveSubmitBtn">Submit</button>
+      </form>
+      <div class="form-success" id="giveSuccess">✦ Thank you for your giving! We've recorded it.</div>
+    </div>
+  </div>
+
+  <!-- GIVING CATEGORIES -->
+  <section class="section-pad bg-dark">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow light">How to Give</p>
+        <h2 class="section-title light">Types of <em>Giving</em></h2>
+      </div>
+      <div class="giving-types-grid">
+        <div class="giving-type-card reveal delay-1">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          <h4>Tithe</h4>
+          <p>The first 10% of your income, returned to God as an act of worship and obedience.</p>
+        </div>
+        <div class="giving-type-card reveal delay-2">
+          <i class="fa-solid fa-seedling"></i>
+          <h4>Offering</h4>
+          <p>A freewill gift given above your tithe as an expression of gratitude and love.</p>
+        </div>
+        <div class="giving-type-card reveal delay-3">
+          <i class="fa-solid fa-globe"></i>
+          <h4>Missions</h4>
+          <p>Supporting the spread of the Gospel locally and internationally.</p>
+        </div>
+        <div class="giving-type-card reveal delay-1">
+          <i class="fa-solid fa-building-church"></i>
+          <h4>Building Fund</h4>
+          <p>Contributing to the construction and maintenance of God's house.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+                    <a href="index.html" class="logo logo-light">
+            <img src="logo.png" alt="RCCG Wonderful Mega" class="logo-img logo-img-footer" />
+            <span class="logo-text">
+              <span class="logo-top">Rccg Wonderful</span>
+              <span class="logo-bottom">Mega Church</span>
+            </span>
+          </a>
+          <p class="footer-tagline">A place of worship, growth,<br />and transformation.</p>
+          <div class="social-links mt-1">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-link" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="sermons.html">Sermons</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="give.html">Give</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Ministries</h4>
+          <ul class="footer-links">
+            <li><a href="#">Children's Ministry</a></li>
+            <li><a href="#">Youth Ministry</a></li>
+            <li><a href="#">Women's Fellowship</a></li>
+            <li><a href="#">Men's Fellowship</a></li>
+            <li><a href="#">Prayer Ministry</a></li>
+            <li><a href="#">Missions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Contact Info</h4>
+          <ul class="footer-contact-list">
+            <li><i class="fa-solid fa-location-dot"></i>
+              <a href="https://www.google.com/maps/search/RCCG+Wonderful+Mega+Church+Ijero+Ekiti" target="_blank" class="footer-link-item">Rccg Wonderful Mega,<br/>Ijero Ekiti, Ekiti State</a></li>
+            <li><i class="fa-solid fa-phone"></i>
+              <a href="https://wa.me/2348134185707" target="_blank" class="footer-link-item">+234 8134185707</a></li>
+            <li><i class="fa-solid fa-envelope"></i>
+              <a href="https://mail.google.com/mail/?view=cm&to=rccgwonderfulmega48@gmail.com" target="_blank" class="footer-link-item">rccgwonderfulmega48@gmail.com</a></li>
+            <li><i class="fa-regular fa-clock"></i> Sun: 8AM &amp; 12PM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2026 Rccg Wonderful Mega Church. All Rights Reserved.</p>
+        <p>Built with <span class="heart">♥</span> for the Kingdom</p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </a>
+  <a href="https://wa.me/2348134185707" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <script src="supabase-config.js"></script>
+  <script src="backend.js"></script>
+  <script src="script.js"></script>
+  <script src="give-page.js"></script>
+</body>
+</html>

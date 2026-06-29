@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard – RCCG Wonderful Mega</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    body { background: var(--bg-dark, #1a0808); min-height: 100vh; }
+    .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .admin-header h1 { font-family: var(--font-display); color: var(--gold-light); font-size: 1.8rem; }
+    .admin-logo-row { display: flex; align-items: center; gap: 0.8rem; }
+    .admin-logo-row img { width: 42px; height: 42px; border-radius: 50%; }
+    .admin-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .admin-tab-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #eee; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-family: var(--font-body); font-size: 0.95rem; transition: all 0.2s ease; }
+    .admin-tab-btn.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .admin-tab-btn:hover:not(.active) { background: rgba(255,255,255,0.1); }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    .admin-table-wrap { overflow-x: auto; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+    table.admin-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    table.admin-table th, table.admin-table td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); white-space: nowrap; }
+    table.admin-table th { color: var(--gold-light); font-weight: 600; background: rgba(255,255,255,0.04); }
+    table.admin-table td { color: #ddd; }
+    table.admin-table td.wrap { white-space: normal; max-width: 260px; }
+    .admin-actions-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; justify-content: space-between; }
+    .admin-pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .pill-new { background: rgba(178,34,34,0.2); color: #ff8a8a; }
+    .pill-read, .pill-confirmed, .pill-praying { background: rgba(46,150,68,0.2); color: #6fdb8a; }
+    .pill-replied, .pill-answered { background: rgba(212,238,216,0.2); color: #aef0bc; }
+    .admin-btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: #ddd; cursor: pointer; margin-right: 0.3rem; }
+    .admin-btn-sm:hover { background: rgba(255,255,255,0.15); }
+    .admin-btn-sm.danger:hover { background: rgba(178,34,34,0.3); color: #ff8a8a; }
+    .admin-empty { padding: 2rem; text-align: center; opacity: 0.6; }
+    .admin-form-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .admin-form-card h3 { font-family: var(--font-display); color: var(--purple-mid); margin-bottom: 1rem; font-size: 1.2rem; }
+    .admin-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .admin-form-grid label { display: block; font-size: 0.85rem; color: #bbb; margin-bottom: 0.3rem; }
+    .admin-form-grid input, .admin-form-grid select, .admin-form-grid textarea {
+      width: 100%; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.2); color: #fff; font-family: var(--font-body); font-size: 0.9rem;
+    }
+    .admin-form-grid textarea { grid-column: 1 / -1; resize: vertical; }
+
+    /* Login screen */
+    .login-wrap { max-width: 380px; margin: 8vh auto; padding: 2.5rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; text-align: center; }
+    .login-wrap img { width: 70px; margin-bottom: 1rem; }
+    .login-wrap h2 { font-family: var(--font-display); color: var(--gold-light); margin-bottom: 0.4rem; }
+    .login-wrap p.sub { color: #999; margin-bottom: 1.8rem; font-size: 0.9rem; }
+    .login-wrap .form-group { text-align: left; margin-bottom: 1rem; }
+    .login-wrap label { display: block; font-size: 0.85rem; color: #bbb; margin-bottom: 0.3rem; }
+    .login-wrap input { width: 100%; padding: 0.7rem 0.9rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.25); color: #fff; }
+    .login-error { color: #ff8a8a; font-size: 0.85rem; margin-top: 0.8rem; display: none; }
+    #adminApp { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════ LOGIN SCREEN ════════════ -->
+  <div class="login-wrap" id="loginWrap">
+    <img src="logo.png" alt="RCCG Wonderful Mega" />
+    <h2>Admin Login</h2>
+    <p class="sub">RCCG Wonderful Mega Church</p>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-gold full-width" id="loginBtn">Log In</button>
+      <p class="login-error" id="loginError">Invalid email or password.</p>
+    </form>
+  </div>
+
+  <!-- ════════════ ADMIN APP ════════════ -->
+  <div id="adminApp">
+    <div class="admin-wrap">
+      <div class="admin-header">
+        <div class="admin-logo-row">
+          <img src="logo.png" alt="logo" />
+          <h1>Admin Dashboard</h1>
+        </div>
+        <button class="btn btn-outline-white" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-panel="panel-contact">Contact Messages</button>
+        <button class="admin-tab-btn" data-panel="panel-events">Events</button>
+        <button class="admin-tab-btn" data-panel="panel-registrations">Registrations</button>
+        <button class="admin-tab-btn" data-panel="panel-sermons">Sermons</button>
+        <button class="admin-tab-btn" data-panel="panel-prayer">Prayer Requests</button>
+        <button class="admin-tab-btn" data-panel="panel-giving">Giving Records</button>
+      </div>
+
+      <!-- CONTACT MESSAGES -->
+      <div class="admin-panel active" id="panel-contact">
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">Contact Form Submissions</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('contact')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="contactTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- EVENTS -->
+      <div class="admin-panel" id="panel-events">
+        <div class="admin-form-card">
+          <h3>Add New Event</h3>
+          <form id="eventForm">
+            <div class="admin-form-grid">
+              <div><label>Title</label><input type="text" id="evTitle" required /></div>
+              <div><label>Tag</label><input type="text" id="evTag" placeholder="Annual, Youth, Outreach..." /></div>
+              <div><label>Date</label><input type="date" id="evDate" required /></div>
+              <div><label>Start Time</label><input type="text" id="evStart" placeholder="8:00 AM" /></div>
+              <div><label>End Time</label><input type="text" id="evEnd" placeholder="1:00 PM" /></div>
+              <div><label>Location</label><input type="text" id="evLocation" /></div>
+              <div><label>Button Label</label>
+                <select id="evCta">
+                  <option>Register Now</option>
+                  <option>Volunteer</option>
+                  <option>RSVP</option>
+                </select>
+              </div>
+              <div><label>Image URL (optional)</label><input type="text" id="evImage" placeholder="https://..." /></div>
+              <textarea id="evDesc" rows="2" placeholder="Description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-gold">Add Event</button>
+          </form>
+        </div>
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">All Events</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('events')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="eventsTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- REGISTRATIONS -->
+      <div class="admin-panel" id="panel-registrations">
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">Event Registrations</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('registrations')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="registrationsTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- SERMONS -->
+      <div class="admin-panel" id="panel-sermons">
+        <div class="admin-form-card">
+          <h3>Add New Sermon</h3>
+          <form id="sermonForm">
+            <div class="admin-form-grid">
+              <div><label>Title</label><input type="text" id="smTitle" required /></div>
+              <div><label>Preacher</label><input type="text" id="smPreacher" required /></div>
+              <div><label>Date</label><input type="date" id="smDate" required /></div>
+              <div><label>Category</label>
+                <select id="smCategory">
+                  <option value="sunday">Sunday Service</option>
+                  <option value="bible">Bible Study</option>
+                  <option value="special">Special</option>
+                </select>
+              </div>
+              <div><label>Image URL (optional)</label><input type="text" id="smImage" placeholder="https://..." /></div>
+              <div><label>Watch URL (optional)</label><input type="text" id="smWatch" placeholder="https://..." /></div>
+              <div><label>Listen URL (optional)</label><input type="text" id="smListen" placeholder="https://..." /></div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-top:1.4rem;">
+                <input type="checkbox" id="smIsNew" style="width:auto;" />
+                <label for="smIsNew" style="margin:0;">Mark as "New"</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gold">Add Sermon</button>
+          </form>
+        </div>
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">All Sermons</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('sermons')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="sermonsTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- PRAYER REQUESTS -->
+      <div class="admin-panel" id="panel-prayer">
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">Prayer Requests</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('prayer')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="prayerTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- GIVING RECORDS -->
+      <div class="admin-panel" id="panel-giving">
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">Giving Records</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('giving')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="givingTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
