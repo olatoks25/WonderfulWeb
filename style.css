@@ -2086,7 +2086,114 @@
     margin-bottom: 0.5rem;
   }
   .ministry-card p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.6; }
-  
+  a.ministry-card { display: block; text-decoration: none; cursor: pointer; }
+
+  /* ─── MINISTRY DETAIL SECTIONS (ministries.html) ────── */
+  .ministry-detail-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .ministry-detail-grid.reverse { grid-template-columns: 1fr 180px; }
+  .ministry-detail-grid.reverse .ministry-detail-icon { order: 2; }
+  .ministry-detail-icon {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(201,151,59,0.12);
+    border: 1px solid rgba(201,151,59,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--gold-light);
+    margin: 0 auto;
+  }
+  .ministry-detail-text {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+    margin: 1rem 0 1.5rem;
+  }
+  .bg-dark .ministry-detail-text { color: rgba(255,255,255,0.65); }
+  .ministry-meta-list { list-style: none; padding: 0; margin: 0 0 1.75rem; }
+  .ministry-meta-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    color: var(--text-body);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .bg-dark .ministry-meta-list li { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.08); }
+  .ministry-meta-list li i { color: var(--gold-light); width: 16px; }
+  .ministry-detail-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  @media (max-width: 768px) {
+    .ministry-detail-grid, .ministry-detail-grid.reverse {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.5rem;
+    }
+    .ministry-detail-grid.reverse .ministry-detail-icon { order: 0; }
+    .ministry-detail-cta { justify-content: center; }
+  }
+
+  /* ─── PRAYER WALL (contact.html) ────────────────────── */
+  .prayer-wall-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .prayer-wall-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .prayer-wall-card.answered { border-color: rgba(46,150,68,0.4); }
+  .prayer-wall-text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: #fff;
+    margin: 0 0 1.25rem;
+    flex: 1;
+  }
+  .prayer-wall-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+  }
+  .prayer-wall-name { font-weight: 500; color: rgba(255,255,255,0.7); }
+  .pray-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: #fff;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .pray-btn:hover { background: var(--gold); border-color: var(--gold); }
+  .pray-btn:disabled { opacity: 0.6; cursor: default; }
+  .prayer-wall-empty { text-align: center; color: rgba(255,255,255,0.5); padding: 2rem; grid-column: 1 / -1; }
+  @media (max-width: 900px) { .prayer-wall-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .prayer-wall-grid { grid-template-columns: 1fr; } }
+
   /* ─── SERMON FILTERS ────────────────────────────────── */
   .sermon-filters {
     display: flex;

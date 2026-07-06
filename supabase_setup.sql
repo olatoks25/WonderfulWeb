@@ -222,6 +222,69 @@ create policy "Admins can delete giving records"
 
 
 -- ================================================================
+-- 7. MEMBERS (member registration / directory)
+-- ================================================================
+create table if not exists members (
+  id             uuid primary key default gen_random_uuid(),
+  full_name      text not null,
+  email          text not null,
+  phone          text not null,
+  date_of_birth  date,
+  home_address   text,
+  status         text default 'new',        -- 'new' | 'contacted' | 'active'
+  created_at     timestamptz default now()
+);
+
+alter table members enable row level security;
+
+drop policy if exists "Public can register as a member" on members;
+create policy "Public can register as a member"
+  on members for insert to anon with check (true);
+
+drop policy if exists "Admins can view members" on members;
+create policy "Admins can view members"
+  on members for select to authenticated using (true);
+
+drop policy if exists "Admins can update members" on members;
+create policy "Admins can update members"
+  on members for update to authenticated using (true);
+
+drop policy if exists "Admins can delete members" on members;
+create policy "Admins can delete members"
+  on members for delete to authenticated using (true);
+
+
+-- ================================================================
+-- 8. PRAYER WALL (public, moderated view of prayer_requests)
+-- ================================================================
+-- Adds the ability for an admin to mark a prayer request as safe to
+-- show publicly, and lets visitors tap "I'm praying" without being
+-- able to read or edit anything else in the table.
+alter table prayer_requests add column if not exists show_on_wall boolean default false;
+alter table prayer_requests add column if not exists pray_count integer default 0;
+
+drop policy if exists "Public can view prayer wall" on prayer_requests;
+create policy "Public can view prayer wall"
+  on prayer_requests for select to anon
+  using (show_on_wall = true and is_private = false);
+
+-- Security-definer function: the ONLY way an anonymous visitor can
+-- increment a count. It cannot read or change anything else.
+create or replace function increment_pray_count(request_id uuid)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  update prayer_requests
+  set pray_count = pray_count + 1
+  where id = request_id and show_on_wall = true and is_private = false;
+$$;
+
+grant execute on function increment_pray_count(uuid) to anon;
+
+
+-- ================================================================
 -- INDEXES
 -- ================================================================
 create index if not exists idx_contact_created     on contact_submissions (created_at desc);
@@ -230,7 +293,9 @@ create index if not exists idx_registrations_event  on event_registrations (even
 create index if not exists idx_sermons_date         on sermons (sermon_date desc);
 create index if not exists idx_sermons_category     on sermons (category);
 create index if not exists idx_prayer_created       on prayer_requests (created_at desc);
+create index if not exists idx_prayer_wall          on prayer_requests (show_on_wall);
 create index if not exists idx_giving_created       on giving_records (created_at desc);
+create index if not exists idx_members_created      on members (created_at desc);
 
 
 -- ================================================================

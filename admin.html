@@ -100,6 +100,7 @@
         <button class="admin-tab-btn" data-panel="panel-sermons">Sermons</button>
         <button class="admin-tab-btn" data-panel="panel-prayer">Prayer Requests</button>
         <button class="admin-tab-btn" data-panel="panel-giving">Giving Records</button>
+        <button class="admin-tab-btn" data-panel="panel-members">Members</button>
       </div>
 
       <!-- CONTACT MESSAGES -->
@@ -202,6 +203,15 @@
           <button class="btn btn-outline btn-sm" onclick="refreshPanel('giving')"><i class="fa-solid fa-rotate"></i> Refresh</button>
         </div>
         <div class="admin-table-wrap"><div id="givingTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- MEMBERS -->
+      <div class="admin-panel" id="panel-members">
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">Registered Members</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('members')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="membersTableHost"><p class="admin-empty">Loading…</p></div></div>
       </div>
 
     </div>

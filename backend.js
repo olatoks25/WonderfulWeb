@@ -88,6 +88,52 @@ async function saveGivingRecord(d) {
 }
 
 /* ──────────────────────────────────────────────────
+   MEMBER REGISTRATION SAVE
+   ────────────────────────────────────────────────── */
+async function saveMember(d) {
+  if (!hasSupabase()) return { error: "no-client" };
+  const { error } = await supabaseClient.from("members").insert([{
+    full_name:     d.fullName,
+    email:         d.email,
+    phone:         d.phone,
+    date_of_birth: d.dateOfBirth || null,
+    home_address:  d.homeAddress,
+  }]);
+  if (error) console.error("Member registration save error:", error.message);
+  return { error };
+}
+
+/* ──────────────────────────────────────────────────
+   PRAYER WALL — load public, approved requests
+   ────────────────────────────────────────────────── */
+async function loadPrayerWall(limit) {
+  if (!hasSupabase()) return [];
+  let query = supabaseClient
+    .from("prayer_requests")
+    .select("id, full_name, request_text, status, pray_count, created_at")
+    .eq("show_on_wall", true)
+    .eq("is_private", false)
+    .order("created_at", { ascending: false });
+  if (limit) query = query.limit(limit);
+  const { data, error } = await query;
+  if (error) {
+    console.error("Load prayer wall error:", error.message);
+    return [];
+  }
+  return data || [];
+}
+
+/* ──────────────────────────────────────────────────
+   PRAYER WALL — tap "I'm praying" (safe, count-only)
+   ────────────────────────────────────────────────── */
+async function prayForRequest(requestId) {
+  if (!hasSupabase()) return { error: "no-client" };
+  const { error } = await supabaseClient.rpc("increment_pray_count", { request_id: requestId });
+  if (error) console.error("Pray count error:", error.message);
+  return { error };
+}
+
+/* ──────────────────────────────────────────────────
    LOAD LIVE EVENTS (for events.html)
    ────────────────────────────────────────────────── */
 async function loadEvents() {

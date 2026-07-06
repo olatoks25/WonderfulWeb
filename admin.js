@@ -98,6 +98,7 @@ function loadAllPanels() {
   refreshPanel("sermons");
   refreshPanel("prayer");
   refreshPanel("giving");
+  refreshPanel("members");
 }
 
 async function refreshPanel(name) {
@@ -108,6 +109,7 @@ async function refreshPanel(name) {
     sermons: renderSermonsTable,
     prayer: renderPrayerTable,
     giving: renderGivingTable,
+    members: renderMembersTable,
   };
   if (fns[name]) await fns[name]();
 }
@@ -319,7 +321,7 @@ async function renderPrayerTable() {
 
   host.innerHTML = `
     <table class="admin-table">
-      <thead><tr><th>Date</th><th>Name</th><th>Contact</th><th>Request</th><th>Private?</th><th>Status</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Date</th><th>Name</th><th>Contact</th><th>Request</th><th>Private?</th><th>Status</th><th>On Wall?</th><th>🙏 Count</th><th>Actions</th></tr></thead>
       <tbody>
         ${data.map(row => `
           <tr>
@@ -329,12 +331,15 @@ async function renderPrayerTable() {
             <td class="wrap">${escapeHtmlA(row.request_text)}</td>
             <td>${row.is_private ? "🔒" : "—"}</td>
             <td><span class="admin-pill pill-${row.status}">${escapeHtmlA(row.status)}</span></td>
+            <td>${row.show_on_wall ? "✅" : "🚫"}</td>
+            <td>${row.pray_count || 0}</td>
             <td>
               <select class="admin-btn-sm" onchange="updatePrayerStatus('${row.id}', this.value)" style="background:#222;color:#fff;">
                 <option value="new" ${row.status === "new" ? "selected" : ""}>New</option>
                 <option value="praying" ${row.status === "praying" ? "selected" : ""}>Praying</option>
                 <option value="answered" ${row.status === "answered" ? "selected" : ""}>Answered</option>
               </select>
+              ${!row.is_private ? `<button class="admin-btn-sm" onclick="togglePrayerWall('${row.id}', ${row.show_on_wall})">${row.show_on_wall ? "Remove from Wall" : "Show on Wall"}</button>` : ""}
               <button class="admin-btn-sm danger" onclick="deleteRow('prayer_requests','${row.id}','prayer')">Delete</button>
             </td>
           </tr>
@@ -346,6 +351,11 @@ async function renderPrayerTable() {
 
 async function updatePrayerStatus(id, status) {
   await supabaseClient.from("prayer_requests").update({ status }).eq("id", id);
+  renderPrayerTable();
+}
+
+async function togglePrayerWall(id, current) {
+  await supabaseClient.from("prayer_requests").update({ show_on_wall: !current }).eq("id", id);
   renderPrayerTable();
 }
 
@@ -389,6 +399,51 @@ async function renderGivingTable() {
 async function confirmGiving(id) {
   await supabaseClient.from("giving_records").update({ status: "confirmed" }).eq("id", id);
   renderGivingTable();
+}
+
+/* ──────────────────────────────────────────────────
+   7. MEMBERS
+   ────────────────────────────────────────────────── */
+async function renderMembersTable() {
+  const host = document.getElementById("membersTableHost");
+  const { data, error } = await supabaseClient
+    .from("members")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) { host.innerHTML = `<p class="admin-empty">Error loading: ${escapeHtmlA(error.message)}</p>`; return; }
+  if (!data.length) { host.innerHTML = `<p class="admin-empty">No members registered yet.</p>`; return; }
+
+  host.innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>DOB</th><th>Home Address</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td>${fmtDateTime(row.created_at)}</td>
+            <td>${escapeHtmlA(row.full_name)}</td>
+            <td>${escapeHtmlA(row.email)}</td>
+            <td>${escapeHtmlA(row.phone)}</td>
+            <td>${escapeHtmlA(row.date_of_birth) || "—"}</td>
+            <td class="wrap">${escapeHtmlA(row.home_address) || "—"}</td>
+            <td>
+              <select class="admin-btn-sm" onchange="updateMemberStatus('${row.id}', this.value)" style="background:#222;color:#fff;">
+                <option value="new" ${row.status === "new" ? "selected" : ""}>New</option>
+                <option value="contacted" ${row.status === "contacted" ? "selected" : ""}>Contacted</option>
+                <option value="active" ${row.status === "active" ? "selected" : ""}>Active</option>
+              </select>
+            </td>
+            <td><button class="admin-btn-sm danger" onclick="deleteRow('members','${row.id}','members')">Delete</button></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+async function updateMemberStatus(id, status) {
+  await supabaseClient.from("members").update({ status }).eq("id", id);
+  renderMembersTable();
 }
 
 /* ──────────────────────────────────────────────────
