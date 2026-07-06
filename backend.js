@@ -92,13 +92,13 @@ async function saveGivingRecord(d) {
    ────────────────────────────────────────────────── */
 async function saveMember(d) {
   if (!hasSupabase()) return { error: "no-client" };
-  const { error } = await supabaseClient.from("members").insert([{
-    full_name:     d.fullName,
-    email:         d.email,
-    phone:         d.phone,
-    date_of_birth: d.dateOfBirth || null,
-    home_address:  d.homeAddress,
-  }]);
+  const { error } = await supabaseClient.rpc("register_member", {
+    p_full_name: d.fullName,
+    p_email:     d.email,
+    p_phone:     d.phone,
+    p_dob:       d.dateOfBirth || null,
+    p_address:   d.homeAddress,
+  });
   if (error) console.error("Member registration save error:", error.message);
   return { error };
 }

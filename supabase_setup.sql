@@ -253,6 +253,27 @@ drop policy if exists "Admins can delete members" on members;
 create policy "Admins can delete members"
   on members for delete to authenticated using (true);
 
+-- Security-definer registration function: lets an anonymous visitor
+-- insert their own member record without needing SELECT rights on
+-- the table (which would otherwise expose everyone's phone/address).
+create or replace function register_member(
+  p_full_name text,
+  p_email text,
+  p_phone text,
+  p_dob date,
+  p_address text
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into members (full_name, email, phone, date_of_birth, home_address)
+  values (p_full_name, p_email, p_phone, p_dob, p_address);
+$$;
+
+grant execute on function register_member(text, text, text, date, text) to anon;
+
 
 -- ================================================================
 -- 8. PRAYER WALL (public, moderated view of prayer_requests)
