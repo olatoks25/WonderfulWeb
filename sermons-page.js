@@ -26,6 +26,8 @@ function renderSermonCard(s, delayClass) {
   const article = document.createElement("article");
   article.className = `sermon-card reveal ${delayClass}`;
   article.setAttribute("data-cat", s.category || "sunday");
+  article.setAttribute("data-preacher", s.preacher || "");
+  article.setAttribute("data-search", `${(s.title || "").toLowerCase()} ${(s.preacher || "").toLowerCase()}`);
   article.innerHTML = `
     <div class="sermon-img-wrap">
       <img src="${escapeHtmlS(s.image_url || fallbackImg)}" alt="${escapeHtmlS(s.title)}" />
@@ -45,25 +47,62 @@ function renderSermonCard(s, delayClass) {
   return article;
 }
 
+function populatePreacherDropdown(sermons) {
+  const select = document.getElementById("sermonPreacherSelect");
+  if (!select) return;
+  const preachers = [...new Set(sermons.map(s => s.preacher).filter(Boolean))].sort();
+  preachers.forEach(p => {
+    const opt = document.createElement("option");
+    opt.value = p;
+    opt.textContent = p;
+    select.appendChild(opt);
+  });
+}
+
+function applySermonFilters() {
+  const activeBtn = document.querySelector(".filter-btn.active");
+  const category = activeBtn ? activeBtn.getAttribute("data-filter") : "all";
+  const preacher = document.getElementById("sermonPreacherSelect")?.value || "all";
+  const searchText = (document.getElementById("sermonSearchInput")?.value || "").trim().toLowerCase();
+
+  const cards = document.querySelectorAll(".sermon-card[data-cat]");
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const matchesCategory = category === "all" || card.getAttribute("data-cat") === category;
+    const matchesPreacher = preacher === "all" || card.getAttribute("data-preacher") === preacher;
+    const matchesSearch = !searchText || card.getAttribute("data-search").includes(searchText);
+
+    if (matchesCategory && matchesPreacher && matchesSearch) {
+      card.classList.remove("hidden");
+      card.style.animation = "fadeUp 0.4s ease forwards";
+      visibleCount++;
+    } else {
+      card.classList.add("hidden");
+    }
+  });
+
+  const noResults = document.getElementById("sermonNoResults");
+  if (noResults) noResults.style.display = visibleCount === 0 ? "block" : "none";
+}
+
 function bindSermonFilters() {
   const filterBtns = document.querySelectorAll(".filter-btn");
-  const cards = document.querySelectorAll(".sermon-card[data-cat]");
 
   filterBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       filterBtns.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-
-      const filter = btn.getAttribute("data-filter");
-      cards.forEach(card => {
-        if (filter === "all" || card.getAttribute("data-cat") === filter) {
-          card.classList.remove("hidden");
-          card.style.animation = "fadeUp 0.4s ease forwards";
-        } else {
-          card.classList.add("hidden");
-        }
-      });
+      applySermonFilters();
     });
+  });
+
+  document.getElementById("sermonPreacherSelect")?.addEventListener("change", applySermonFilters);
+
+  let debounceId;
+  document.getElementById("sermonSearchInput")?.addEventListener("input", () => {
+    clearTimeout(debounceId);
+    debounceId = setTimeout(applySermonFilters, 200);
   });
 }
 
@@ -91,6 +130,7 @@ async function renderSermons() {
     }
   });
 
+  populatePreacherDropdown(sermons);
   bindSermonFilters();
 }
 

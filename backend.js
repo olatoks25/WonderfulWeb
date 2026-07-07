@@ -170,6 +170,26 @@ async function loadSermons(limit) {
 }
 
 /* ──────────────────────────────────────────────────
+   LOAD NEXT UPCOMING EVENT (for homepage countdown)
+   ────────────────────────────────────────────────── */
+async function loadNextEvent() {
+  if (!hasSupabase()) return null;
+  const today = new Date().toISOString().slice(0, 10);
+  const { data, error } = await supabaseClient
+    .from("events")
+    .select("*")
+    .eq("published", true)
+    .gte("event_date", today)
+    .order("event_date", { ascending: true })
+    .limit(1);
+  if (error) {
+    console.error("Load next event error:", error.message);
+    return null;
+  }
+  return (data && data[0]) || null;
+}
+
+/* ──────────────────────────────────────────────────
    HELPERS
    ────────────────────────────────────────────────── */
 function formatEventDate(dateStr) {

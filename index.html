@@ -50,7 +50,7 @@
   <!-- HERO -->
   <section id="home" class="hero">
     <div class="hero-bg">
-      <img src="https://i.pinimg.com/1200x/76/52/10/7652100f8e8f36ed8de6e61e26297f99.jpg" alt="Church worship" class="hero-img" />
+      <img src="https://images.unsplash.com/photo-1438232992991-995b671e4668?w=1800&q=80" alt="Church worship" class="hero-img" />
       <div class="hero-overlay"></div>
     </div>
     <div class="hero-particles">
@@ -72,6 +72,23 @@
         <span class="scroll-line"></span>
         <span class="scroll-dot"></span>
       </div>
+    </div>
+  </section>
+
+  <!-- NEXT EVENT COUNTDOWN -->
+  <section class="countdown-banner" id="countdownBanner" style="display:none;">
+    <div class="container countdown-inner">
+      <div class="countdown-label">
+        <i class="fa-regular fa-calendar-star"></i>
+        <span>Next Up: <strong id="countdownEventTitle">—</strong></span>
+      </div>
+      <div class="countdown-timer" id="countdownTimer">
+        <div class="countdown-unit"><span id="cdDays">00</span><small>Days</small></div>
+        <div class="countdown-unit"><span id="cdHours">00</span><small>Hrs</small></div>
+        <div class="countdown-unit"><span id="cdMins">00</span><small>Min</small></div>
+        <div class="countdown-unit"><span id="cdSecs">00</span><small>Sec</small></div>
+      </div>
+      <a href="events.html" class="btn btn-gold btn-sm">View Details</a>
     </div>
   </section>
 
@@ -277,6 +294,10 @@
   <a href="https://wa.me/2348134185707" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat on WhatsApp">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="backend.js"></script>
   <script src="script.js"></script>
+  <script src="index-page.js"></script>
 </body>
 </html>
