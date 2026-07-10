@@ -25,14 +25,14 @@ function hasSupabase() {
    ────────────────────────────────────────────────── */
 async function saveContactSubmission(d) {
   if (!hasSupabase()) return { error: "no-client" };
-  const { error } = await supabaseClient.from("contact_submissions").insert([{
-    first_name: d.firstName,
-    last_name:  d.lastName,
-    email:      d.email,
-    phone:      d.phone,
-    subject:    d.subject,
-    message:    d.message,
-  }]);
+  const { error } = await supabaseClient.rpc("register_contact_submission", {
+    p_first_name: d.firstName,
+    p_last_name:  d.lastName,
+    p_email:      d.email,
+    p_phone:      d.phone,
+    p_subject:    d.subject,
+    p_message:    d.message,
+  });
   if (error) console.error("Contact save error:", error.message);
   return { error };
 }
@@ -42,13 +42,13 @@ async function saveContactSubmission(d) {
    ────────────────────────────────────────────────── */
 async function saveEventRegistration(d) {
   if (!hasSupabase()) return { error: "no-client" };
-  const { error } = await supabaseClient.from("event_registrations").insert([{
-    event_id:  d.eventId,
-    full_name: d.fullName,
-    email:     d.email,
-    phone:     d.phone,
-    notes:     d.notes,
-  }]);
+  const { error } = await supabaseClient.rpc("register_event_registration", {
+    p_event_id:  d.eventId,
+    p_full_name: d.fullName,
+    p_email:     d.email,
+    p_phone:     d.phone,
+    p_notes:     d.notes,
+  });
   if (error) console.error("Registration save error:", error.message);
   return { error };
 }
@@ -58,13 +58,13 @@ async function saveEventRegistration(d) {
    ────────────────────────────────────────────────── */
 async function savePrayerRequest(d) {
   if (!hasSupabase()) return { error: "no-client" };
-  const { error } = await supabaseClient.from("prayer_requests").insert([{
-    full_name:    d.fullName,
-    email:        d.email,
-    phone:        d.phone,
-    request_text: d.requestText,
-    is_private:   d.isPrivate || false,
-  }]);
+  const { error } = await supabaseClient.rpc("register_prayer_request", {
+    p_full_name:    d.fullName,
+    p_email:        d.email,
+    p_phone:        d.phone,
+    p_request_text: d.requestText,
+    p_is_private:   d.isPrivate || false,
+  });
   if (error) console.error("Prayer request save error:", error.message);
   return { error };
 }
@@ -74,15 +74,15 @@ async function savePrayerRequest(d) {
    ────────────────────────────────────────────────── */
 async function saveGivingRecord(d) {
   if (!hasSupabase()) return { error: "no-client" };
-  const { error } = await supabaseClient.from("giving_records").insert([{
-    full_name:      d.fullName,
-    email:          d.email,
-    phone:          d.phone,
-    giving_type:    d.givingType,
-    amount:         d.amount || null,
-    payment_method: d.paymentMethod || "bank_transfer",
-    reference_note: d.referenceNote,
-  }]);
+  const { error } = await supabaseClient.rpc("register_giving_record", {
+    p_full_name:      d.fullName,
+    p_email:          d.email,
+    p_phone:          d.phone,
+    p_giving_type:    d.givingType,
+    p_amount:         d.amount || null,
+    p_payment_method: d.paymentMethod || "bank_transfer",
+    p_reference_note: d.referenceNote,
+  });
   if (error) console.error("Giving record save error:", error.message);
   return { error };
 }

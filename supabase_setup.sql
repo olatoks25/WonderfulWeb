@@ -39,6 +39,23 @@ drop policy if exists "Admins can delete contact submissions" on contact_submiss
 create policy "Admins can delete contact submissions"
   on contact_submissions for delete to authenticated using (true);
 
+-- Security-definer submission function (same reasoning as register_member:
+-- avoids anon needing SELECT rights just to insert a message).
+create or replace function register_contact_submission(
+  p_first_name text, p_last_name text, p_email text,
+  p_phone text, p_subject text, p_message text
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into contact_submissions (first_name, last_name, email, phone, subject, message)
+  values (p_first_name, p_last_name, p_email, p_phone, p_subject, p_message);
+$$;
+
+grant execute on function register_contact_submission(text, text, text, text, text, text) to anon;
+
 
 -- ================================================================
 -- 2. EVENTS
@@ -107,6 +124,23 @@ create policy "Admins can view registrations"
 drop policy if exists "Admins can delete registrations" on event_registrations;
 create policy "Admins can delete registrations"
   on event_registrations for delete to authenticated using (true);
+
+-- Security-definer submission function (avoids anon needing SELECT
+-- rights on event_registrations, which would expose other people's
+-- names/phone numbers/notes).
+create or replace function register_event_registration(
+  p_event_id uuid, p_full_name text, p_email text, p_phone text, p_notes text
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into event_registrations (event_id, full_name, email, phone, notes)
+  values (p_event_id, p_full_name, p_email, p_phone, p_notes);
+$$;
+
+grant execute on function register_event_registration(uuid, text, text, text, text) to anon;
 
 
 -- ================================================================
@@ -181,6 +215,24 @@ drop policy if exists "Admins can delete prayer requests" on prayer_requests;
 create policy "Admins can delete prayer requests"
   on prayer_requests for delete to authenticated using (true);
 
+-- Security-definer submission function (avoids anon needing SELECT
+-- rights on prayer_requests before it's been approved for the wall —
+-- otherwise a new "private" request would fail to save at all).
+create or replace function register_prayer_request(
+  p_full_name text, p_email text, p_phone text,
+  p_request_text text, p_is_private boolean
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into prayer_requests (full_name, email, phone, request_text, is_private)
+  values (p_full_name, p_email, p_phone, p_request_text, coalesce(p_is_private, false));
+$$;
+
+grant execute on function register_prayer_request(text, text, text, text, boolean) to anon;
+
 
 -- ================================================================
 -- 6. GIVING RECORDS
@@ -219,6 +271,23 @@ create policy "Admins can update giving records"
 drop policy if exists "Admins can delete giving records" on giving_records;
 create policy "Admins can delete giving records"
   on giving_records for delete to authenticated using (true);
+
+-- Security-definer submission function (avoids anon needing SELECT
+-- rights on giving_records, which would expose other givers' amounts).
+create or replace function register_giving_record(
+  p_full_name text, p_email text, p_phone text, p_giving_type text,
+  p_amount numeric, p_payment_method text, p_reference_note text
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into giving_records (full_name, email, phone, giving_type, amount, payment_method, reference_note)
+  values (p_full_name, p_email, p_phone, coalesce(p_giving_type, 'offering'), p_amount, coalesce(p_payment_method, 'bank_transfer'), p_reference_note);
+$$;
+
+grant execute on function register_giving_record(text, text, text, text, numeric, text, text) to anon;
 
 
 -- ================================================================

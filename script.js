@@ -249,6 +249,36 @@ async function saveToSupabase(d) {
   await saveContactSubmission(d);
 }
 
+// Send directly to us (saves to our database — no external app needed)
+document.getElementById("sendDirectBtn")?.addEventListener("click", async (e) => {
+  if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
+  const btn = e.currentTarget;
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending…`;
+
+  const d = getFormData();
+
+  if (typeof saveContactSubmission !== "function") {
+    alert("Something went wrong. Please try Gmail or WhatsApp instead, or contact us directly.");
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    return;
+  }
+
+  const { error } = await saveContactSubmission(d);
+
+  btn.disabled = false;
+  btn.innerHTML = originalText;
+
+  if (error) {
+    alert("Something went wrong sending your message. Please try again, or use Gmail/WhatsApp below.");
+    return;
+  }
+
+  showSuccess();
+});
+
 // Send via Gmail
 document.getElementById("sendEmailBtn")?.addEventListener("click", () => {
   if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
