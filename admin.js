@@ -99,6 +99,7 @@ function loadAllPanels() {
   refreshPanel("prayer");
   refreshPanel("giving");
   refreshPanel("members");
+  refreshPanel("ministryReg");
 }
 
 async function refreshPanel(name) {
@@ -110,6 +111,7 @@ async function refreshPanel(name) {
     prayer: renderPrayerTable,
     giving: renderGivingTable,
     members: renderMembersTable,
+    ministryReg: renderMinistryRegTable,
   };
   if (fns[name]) await fns[name]();
 }
@@ -444,6 +446,53 @@ async function renderMembersTable() {
 async function updateMemberStatus(id, status) {
   await supabaseClient.from("members").update({ status }).eq("id", id);
   renderMembersTable();
+}
+
+/* ──────────────────────────────────────────────────
+   8. MINISTRY REGISTRATIONS
+   ────────────────────────────────────────────────── */
+async function renderMinistryRegTable() {
+  const host = document.getElementById("ministryRegTableHost");
+  const { data, error } = await supabaseClient
+    .from("ministry_registrations")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) { host.innerHTML = `<p class="admin-empty">Error loading: ${escapeHtmlA(error.message)}</p>`; return; }
+  if (!data.length) { host.innerHTML = `<p class="admin-empty">No ministry applications yet.</p>`; return; }
+
+  host.innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th>Date</th><th>Ministry</th><th>Name</th><th>WhatsApp</th><th>Why Join?</th><th>Served Before?</th><th>Skills/Experience</th><th>Availability</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td>${fmtDateTime(row.created_at)}</td>
+            <td><strong>${escapeHtmlA(row.ministry)}</strong></td>
+            <td>${escapeHtmlA(row.full_name)}</td>
+            <td>${escapeHtmlA(row.whatsapp_number)}</td>
+            <td class="wrap">${escapeHtmlA(row.reason_for_joining)}</td>
+            <td>${row.served_before ? `Yes — ${escapeHtmlA(row.served_before_details) || "—"}` : "No"}</td>
+            <td class="wrap">${escapeHtmlA(row.skills_experience)}</td>
+            <td>${escapeHtmlA(row.availability)}</td>
+            <td>
+              <select class="admin-btn-sm" onchange="updateMinistryRegStatus('${row.id}', this.value)" style="background:#222;color:#fff;">
+                <option value="new" ${row.status === "new" ? "selected" : ""}>New</option>
+                <option value="contacted" ${row.status === "contacted" ? "selected" : ""}>Contacted</option>
+                <option value="approved" ${row.status === "approved" ? "selected" : ""}>Approved</option>
+              </select>
+            </td>
+            <td><button class="admin-btn-sm danger" onclick="deleteRow('ministry_registrations','${row.id}','ministryReg')">Delete</button></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+async function updateMinistryRegStatus(id, status) {
+  await supabaseClient.from("ministry_registrations").update({ status }).eq("id", id);
+  renderMinistryRegTable();
 }
 
 /* ──────────────────────────────────────────────────

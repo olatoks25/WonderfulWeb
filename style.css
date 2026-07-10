@@ -445,6 +445,24 @@
   .delay-4        { animation-delay: 0.8s; }
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   
+  /* ─── RADIO GROUPS (join-ministry.html) ─────────────── */
+  .radio-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    color: var(--text-body);
+    cursor: pointer;
+    margin: 0 !important;
+  }
+  .radio-option input[type="radio"] { width: auto; accent-color: var(--gold); cursor: pointer; }
+
   /* ─── COUNTDOWN BANNER (homepage) ───────────────────── */
   .countdown-banner {
     background: linear-gradient(90deg, var(--gold-dark, #8a6a1f), var(--gold, #C9973B));

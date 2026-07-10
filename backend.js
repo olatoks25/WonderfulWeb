@@ -88,6 +88,25 @@ async function saveGivingRecord(d) {
 }
 
 /* ──────────────────────────────────────────────────
+   MINISTRY REGISTRATION ("Join This Ministry" form)
+   ────────────────────────────────────────────────── */
+async function saveMinistryRegistration(d) {
+  if (!hasSupabase()) return { error: "no-client" };
+  const { error } = await supabaseClient.rpc("register_ministry_volunteer", {
+    p_ministry:              d.ministry,
+    p_full_name:             d.fullName,
+    p_whatsapp_number:       d.whatsappNumber,
+    p_reason_for_joining:    d.reasonForJoining,
+    p_served_before:         d.servedBefore,
+    p_served_before_details: d.servedBeforeDetails || null,
+    p_skills_experience:     d.skillsExperience,
+    p_availability:          d.availability,
+  });
+  if (error) console.error("Ministry registration save error:", error.message);
+  return { error };
+}
+
+/* ──────────────────────────────────────────────────
    MEMBER REGISTRATION SAVE
    ────────────────────────────────────────────────── */
 async function saveMember(d) {

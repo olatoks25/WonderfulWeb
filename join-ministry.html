@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join a Ministry – RCCG Wonderful Mega</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="page-transition">
+
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <img src="logo.png" alt="RCCG Wonderful Mega" class="preloader-logo" />
+    <p class="preloader-text">RCCG Wonderful Mega Church</p>
+  </div>
+
+  <!-- HEADER -->
+  <header id="header">
+    <nav class="navbar container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="RCCG Wonderful Mega" class="logo-img" />
+        <span class="logo-text">
+          <span class="logo-top">Rccg Wonderful</span>
+          <span class="logo-bottom">Mega Church</span>
+        </span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html"   class="nav-link ">Home</a></li>
+        <li><a href="about.html"   class="nav-link ">About</a></li>
+        <li><a href="sermons.html" class="nav-link ">Sermons</a></li>
+        <li><a href="events.html"  class="nav-link ">Events</a></li>
+        <li><a href="give.html"    class="nav-link ">Give</a></li>
+        <li><a href="contact.html" class="nav-link ">Contact</a></li>
+      </ul>
+      <a href="about.html" class="btn btn-gold nav-cta">Join Us This Sunday</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <span class="theme-icon theme-icon-moon">🌙</span>
+        <span class="theme-icon theme-icon-sun">☀️</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1800&q=80" alt="Join a ministry" />
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="container page-hero-content">
+      <p class="section-eyebrow light">Get Involved</p>
+      <h1 class="page-hero-title fade-up delay-1">Join <em id="ministryNameHero">a Ministry</em></h1>
+      <div class="page-breadcrumb fade-up delay-2">
+        <a href="index.html">Home</a> <span>›</span> <a href="ministries.html">Ministries</a> <span>›</span> <span>Join</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact section-pad">
+    <div class="container contact-grid">
+      <div class="contact-info reveal reveal-left">
+        <p class="section-eyebrow">Application</p>
+        <h2 class="section-title">Serve With<br /><em>Your Gifts</em></h2>
+        <p style="color:var(--text-muted);line-height:1.75;margin-bottom:1.5rem;">
+          Tell us a bit about yourself below. A ministry leader will personally
+          review your application and reach out to you on WhatsApp.
+        </p>
+        <ul class="contact-list">
+          <li><i class="fa-solid fa-check"></i> Reviewed personally by a ministry leader</li>
+          <li><i class="fa-solid fa-check"></i> A follow-up call or WhatsApp message</li>
+          <li><i class="fa-solid fa-check"></i> No experience required — just a willing heart</li>
+        </ul>
+      </div>
+
+      <form class="contact-form reveal reveal-right delay-2" id="joinMinistryForm">
+        <h3 style="font-family:var(--font-display);color:var(--purple-mid);margin-bottom:0.5rem;font-size:1.5rem;">Join <span id="ministryNameForm">a Ministry</span></h3>
+
+        <div class="form-group">
+          <label for="jmFullName">Full Name</label>
+          <input type="text" id="jmFullName" placeholder="Your full name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="jmWhatsapp">WhatsApp Number</label>
+          <input type="tel" id="jmWhatsapp" placeholder="+234 800 000 0000" required />
+        </div>
+
+        <div class="form-group">
+          <label for="jmReason">Why do you want to join this ministry?</label>
+          <textarea id="jmReason" rows="3" placeholder="Short answer" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Have you served in a church ministry before?</label>
+          <div class="radio-row">
+            <label class="radio-option"><input type="radio" name="jmServed" value="yes" required /> Yes</label>
+            <label class="radio-option"><input type="radio" name="jmServed" value="no" required /> No</label>
+          </div>
+          <div id="jmServedDetailsWrap" style="display:none;margin-top:0.75rem;">
+            <label for="jmServedDetails">If yes, please specify</label>
+            <input type="text" id="jmServedDetails" placeholder="e.g. Choir at previous church, 2 years" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="jmSkills">What skills, talents, or experience can you contribute to this ministry?</label>
+          <textarea id="jmSkills" rows="3" placeholder="Short answer" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Are you available to attend ministry meetings, rehearsals, trainings, and scheduled services?</label>
+          <div class="radio-row">
+            <label class="radio-option"><input type="radio" name="jmAvailability" value="yes" required /> Yes</label>
+            <label class="radio-option"><input type="radio" name="jmAvailability" value="no" required /> No</label>
+            <label class="radio-option"><input type="radio" name="jmAvailability" value="sometimes" required /> Sometimes</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-gold full-width" id="joinMinistrySubmitBtn">Submit Application</button>
+        <div class="form-success" id="joinMinistrySuccess">✦ Application received! A ministry leader will reach out to you soon.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo logo-light">
+            <img src="logo.png" alt="RCCG Wonderful Mega" class="logo-img logo-img-footer" />
+            <span class="logo-text">
+              <span class="logo-top">Rccg Wonderful</span>
+              <span class="logo-bottom">Mega Church</span>
+            </span>
+          </a>
+          <p class="footer-tagline">A place of worship, growth,<br />and transformation.</p>
+          <div class="social-links mt-1">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/rccgwonderfulmega?igsh=MTFpdWI3azFzbWFocg%3D%3D&utm_source=qr" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-link" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="sermons.html">Sermons</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="give.html">Give</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="members.html">Become a Member</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Ministries</h4>
+          <ul class="footer-links">
+            <li><a href="ministries.html#children">Children's Ministry</a></li>
+            <li><a href="ministries.html#youth">Youth Ministry</a></li>
+            <li><a href="ministries.html#choir">Choir Ministry</a></li>
+            <li><a href="ministries.html#media">Media/Technical Ministry</a></li>
+            <li><a href="ministries.html">View All Ministries →</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Contact Info</h4>
+          <ul class="footer-contact-list">
+            <li><i class="fa-solid fa-location-dot"></i>
+              <a href="https://www.google.com/maps/search/RCCG+Wonderful+Mega+Church+Ijero+Ekiti" target="_blank" class="footer-link-item">Rccg Wonderful Mega,<br/>Ijero Ekiti, Ekiti State</a></li>
+            <li><i class="fa-solid fa-phone"></i>
+              <a href="https://wa.me/2348134185707" target="_blank" class="footer-link-item">+234 8134185707</a></li>
+            <li><i class="fa-solid fa-envelope"></i>
+              <a href="https://mail.google.com/mail/?view=cm&to=rccgwonderfulmega48@gmail.com" target="_blank" class="footer-link-item">rccgwonderfulmega48@gmail.com</a></li>
+            <li><i class="fa-regular fa-clock"></i> Sun: 8AM &amp; 12PM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2026 Rccg Wonderful Mega Church. All Rights Reserved.</p>
+        <p>Built with <span class="heart">♥</span> for the Kingdom</p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </a>
+  <a href="https://wa.me/2348134185707" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chat on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <script src="supabase-config.js"></script>
+  <script src="backend.js"></script>
+  <script src="script.js"></script>
+  <script src="join-ministry-page.js"></script>
+</body>
+</html>

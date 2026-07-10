@@ -276,6 +276,66 @@ grant execute on function register_member(text, text, text, date, text) to anon;
 
 
 -- ================================================================
+-- 9. MINISTRY REGISTRATIONS ("Join This Ministry" applications)
+-- ================================================================
+create table if not exists ministry_registrations (
+  id                    uuid primary key default gen_random_uuid(),
+  ministry              text not null,
+  full_name             text not null,
+  whatsapp_number       text not null,
+  reason_for_joining    text,
+  served_before         boolean,
+  served_before_details text,
+  skills_experience     text,
+  availability          text,        -- 'yes' | 'no' | 'sometimes'
+  status                text default 'new',   -- 'new' | 'contacted' | 'approved'
+  created_at            timestamptz default now()
+);
+
+alter table ministry_registrations enable row level security;
+
+drop policy if exists "Admins can view ministry registrations" on ministry_registrations;
+create policy "Admins can view ministry registrations"
+  on ministry_registrations for select to authenticated using (true);
+
+drop policy if exists "Admins can update ministry registrations" on ministry_registrations;
+create policy "Admins can update ministry registrations"
+  on ministry_registrations for update to authenticated using (true);
+
+drop policy if exists "Admins can delete ministry registrations" on ministry_registrations;
+create policy "Admins can delete ministry registrations"
+  on ministry_registrations for delete to authenticated using (true);
+
+-- Security-definer registration function (same pattern as register_member,
+-- so anon never needs SELECT rights on a table with personal contact info).
+create or replace function register_ministry_volunteer(
+  p_ministry text,
+  p_full_name text,
+  p_whatsapp_number text,
+  p_reason_for_joining text,
+  p_served_before boolean,
+  p_served_before_details text,
+  p_skills_experience text,
+  p_availability text
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into ministry_registrations
+    (ministry, full_name, whatsapp_number, reason_for_joining,
+     served_before, served_before_details, skills_experience, availability)
+  values
+    (p_ministry, p_full_name, p_whatsapp_number, p_reason_for_joining,
+     p_served_before, p_served_before_details, p_skills_experience, p_availability);
+$$;
+
+grant execute on function register_ministry_volunteer
+  (text, text, text, text, boolean, text, text, text) to anon;
+
+
+-- ================================================================
 -- 8. PRAYER WALL (public, moderated view of prayer_requests)
 -- ================================================================
 -- Adds the ability for an admin to mark a prayer request as safe to
@@ -317,6 +377,8 @@ create index if not exists idx_prayer_created       on prayer_requests (created_
 create index if not exists idx_prayer_wall          on prayer_requests (show_on_wall);
 create index if not exists idx_giving_created       on giving_records (created_at desc);
 create index if not exists idx_members_created      on members (created_at desc);
+create index if not exists idx_ministry_reg_created  on ministry_registrations (created_at desc);
+create index if not exists idx_ministry_reg_ministry  on ministry_registrations (ministry);
 
 
 -- ================================================================
