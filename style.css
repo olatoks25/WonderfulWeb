@@ -1837,10 +1837,28 @@
   /* ─── SECTIONS ──────────────────────────────────────── */
   [data-theme="light"] .about          { background: var(--bg-page); }
   [data-theme="light"] .bg-cream       { background: #FFFFFF; }
-  [data-theme="light"] .bg-dark        { background: #1C0808; }
+  [data-theme="light"] .bg-dark        { background: #FFFFFF; }
   
   [data-theme="light"] .section-title  { color: #6B0000; }
   [data-theme="light"] .section-subtitle { color: #5A3A3A; }
+  [data-theme="light"] .section-title.light,
+  [data-theme="light"] .section-eyebrow.light { color: #6B0000; }
+  [data-theme="light"] .section-subtitle.light { color: #5A3A3A; }
+
+  /* Cards/text that were designed assuming a dark section background */
+  [data-theme="light"] .ministry-card { background: #FFFFFF; border: 1px solid rgba(139,0,0,0.1); }
+  [data-theme="light"] .ministry-card i { color: #6B0000; }
+  [data-theme="light"] .ministry-card h4 { color: #1A0A0A; }
+  [data-theme="light"] .ministry-card p { color: #5A3A3A; }
+  [data-theme="light"] .bg-dark .ministry-detail-text { color: #5A3A3A; }
+  [data-theme="light"] .bg-dark .ministry-meta-list li { color: #1A0A0A; border-color: rgba(139,0,0,0.1); }
+
+  [data-theme="light"] .prayer-wall-card { background: #FFFFFF; border: 1px solid rgba(139,0,0,0.1); }
+  [data-theme="light"] .prayer-wall-text { color: #1A0A0A; }
+  [data-theme="light"] .prayer-wall-name { color: #5A3A3A; }
+  [data-theme="light"] .prayer-wall-empty { color: #5A3A3A; }
+  [data-theme="light"] .pray-btn { background: #FBF5F3; border-color: rgba(139,0,0,0.15); color: #1A0A0A; }
+  [data-theme="light"] .pray-btn:hover { background: #8B0000; border-color: #8B0000; color: #fff; }
   [data-theme="light"] .about-desc     { color: #5A3A3A; }
   [data-theme="light"] .stat-num       { color: #8B0000; }
   
@@ -1872,7 +1890,9 @@
   }
   
   /* ─── INFO BAR ──────────────────────────────────────── */
-  [data-theme="light"] .info-bar { background: #8B0000; }
+  [data-theme="light"] .info-bar { background: #FFFFFF; border-bottom: 1px solid rgba(139,0,0,0.1); }
+  [data-theme="light"] .info-item p { color: #5A3A3A; }
+  [data-theme="light"] .info-divider { background: rgba(139,0,0,0.12); }
   
   /* ─── ABOUT SECTION ─────────────────────────────────── */
   [data-theme="light"] .about-stats {
@@ -1906,6 +1926,20 @@
   [data-theme="light"] .sermon-title    { color: #3A1A1A; }
   [data-theme="light"] .sermon-preacher { color: #7A5050; }
   [data-theme="light"] .sermon-play-overlay { background: rgba(139,0,0,0.45); }
+
+  [data-theme="light"] .sermon-search-box {
+    background: #FBF5F3;
+    border-color: rgba(139,0,0,0.15);
+  }
+  [data-theme="light"] .sermon-search-box i { color: #7A5050; }
+  [data-theme="light"] .sermon-search-box input { color: #1A0A0A; }
+  [data-theme="light"] .sermon-search-box input::placeholder { color: #7A5050; }
+  [data-theme="light"] .sermon-preacher-select {
+    background: #FBF5F3;
+    border-color: rgba(139,0,0,0.15);
+    color: #1A0A0A;
+  }
+  [data-theme="light"] .sermon-preacher-select option { background: #FFFFFF; color: #1A0A0A; }
   
   /* ─── TESTIMONIES ───────────────────────────────────── */
   [data-theme="light"] .testimony-card {
@@ -1946,8 +1980,15 @@
   [data-theme="light"] .form-group label { color: #6B0000; }
   
   /* ─── FOOTER ────────────────────────────────────────── */
-  [data-theme="light"] .footer        { background: #1A0505; }
-  [data-theme="light"] .footer-tagline { color: rgba(255,255,255,0.55); }
+  [data-theme="light"] .footer        { background: #FFFFFF; border-top: 1px solid rgba(139,0,0,0.1); }
+  [data-theme="light"] .footer-tagline { color: #5A3A3A; }
+  [data-theme="light"] .footer-links a { color: #5A3A3A; }
+  [data-theme="light"] .footer-links a:hover { color: #6B0000; }
+  [data-theme="light"] .footer-contact-list li { color: #5A3A3A; }
+  [data-theme="light"] .footer-contact-list li i { color: #6B0000; }
+  [data-theme="light"] .footer-bottom { border-top-color: rgba(139,0,0,0.1); }
+  [data-theme="light"] .footer-bottom-inner { color: #5A3A3A; }
+  [data-theme="light"] .heart { color: #B22222; }
 
   /* ─── ADMIN DASHBOARD ────────────────────────────────── */
   [data-theme="light"] .admin-header { border-bottom-color: rgba(139,0,0,0.12); }
