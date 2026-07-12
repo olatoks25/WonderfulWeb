@@ -1862,6 +1862,14 @@
   [data-theme="light"] .nav-link {
     border-bottom-color: rgba(139,0,0,0.08);
   }
+  [data-theme="light"] .nav-close-btn {
+    background: rgba(139,0,0,0.08);
+    color: #6B0000;
+  }
+  [data-theme="light"] .nav-close-btn:hover {
+    background: #8B0000;
+    color: #fff;
+  }
   
   /* ─── INFO BAR ──────────────────────────────────────── */
   [data-theme="light"] .info-bar { background: #8B0000; }
