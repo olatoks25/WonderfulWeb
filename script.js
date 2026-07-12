@@ -55,6 +55,14 @@ hamburger?.addEventListener("click", () => {
   document.body.style.overflow = isOpen ? "hidden" : "";
 });
 
+// Close menu via the X button inside the panel
+document.getElementById("navCloseBtn")?.addEventListener("click", () => {
+  navLinks.classList.remove("open");
+  hamburger.classList.remove("open");
+  hamburger.setAttribute("aria-expanded", "false");
+  document.body.style.overflow = "";
+});
+
 // Close menu when a nav link is clicked
 navLinks?.querySelectorAll(".nav-link").forEach(link => {
   link.addEventListener("click", () => {
