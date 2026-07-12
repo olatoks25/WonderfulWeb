@@ -1647,21 +1647,9 @@
     50%      { transform: translateY(-9px); }
   }
   
-  /* ─── 12. FOOTER entrance gradient line ────────────── */
+  /* ─── 12. FOOTER entrance gradient line (removed) ──── */
   .footer-top {
     position: relative;
-  }
-  .footer-top::before {
-    content: '';
-    display: block;
-    height: 3px;
-    background: linear-gradient(90deg, var(--purple-mid), var(--gold), var(--gold-light), var(--gold), var(--purple-mid));
-    background-size: 300% auto;
-    animation: gradientSlide 4s linear infinite;
-  }
-  @keyframes gradientSlide {
-    0%   { background-position: 0% center; }
-    100% { background-position: 300% center; }
   }
   
   /* ─── 13. SCROLL INDICATOR glow pulse ──────────────── */
