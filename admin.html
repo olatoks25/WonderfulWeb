@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta name="robots" content="noindex, nofollow" />
   <style>
-    body { background: var(--bg-dark, #1a0808); min-height: 100vh; }
+    body { background: var(--bg-page); min-height: 100vh; }
     .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
     .admin-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .admin-header h1 { font-family: var(--font-display); color: var(--gold-light); font-size: 1.8rem; }
@@ -90,7 +90,13 @@
           <img src="logo.png" alt="logo" />
           <h1>Admin Dashboard</h1>
         </div>
-        <button class="btn btn-outline-white" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+            <span class="theme-icon theme-icon-moon">🌙</span>
+            <span class="theme-icon theme-icon-sun">☀️</span>
+          </button>
+          <button class="btn btn-outline-white" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+        </div>
       </div>
 
       <div class="admin-tabs">

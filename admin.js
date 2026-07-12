@@ -14,6 +14,28 @@ const loginBtn     = document.getElementById("loginBtn");
 const loginError   = document.getElementById("loginError");
 const logoutBtn    = document.getElementById("logoutBtn");
 
+/* ──────────────────────────────────────────────────
+   LIGHT / DARK MODE TOGGLE (same behavior as the public site)
+   ────────────────────────────────────────────────── */
+(function initTheme() {
+  const html        = document.documentElement;
+  const toggleBtn   = document.getElementById("themeToggle");
+  const STORAGE_KEY = "wmc-theme";
+
+  const saved = localStorage.getItem(STORAGE_KEY) || "dark";
+  html.setAttribute("data-theme", saved);
+  if (toggleBtn) {
+    toggleBtn.setAttribute("aria-label", saved === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  }
+
+  toggleBtn?.addEventListener("click", () => {
+    const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    html.setAttribute("data-theme", next);
+    localStorage.setItem(STORAGE_KEY, next);
+    toggleBtn.setAttribute("aria-label", next === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  });
+})();
+
 function escapeHtmlA(str) {
   if (str === null || str === undefined) return "";
   const div = document.createElement("div");
@@ -336,7 +358,7 @@ async function renderPrayerTable() {
             <td>${row.show_on_wall ? "✅" : "🚫"}</td>
             <td>${row.pray_count || 0}</td>
             <td>
-              <select class="admin-btn-sm" onchange="updatePrayerStatus('${row.id}', this.value)" style="background:#222;color:#fff;">
+              <select class="admin-btn-sm" onchange="updatePrayerStatus('${row.id}', this.value)">
                 <option value="new" ${row.status === "new" ? "selected" : ""}>New</option>
                 <option value="praying" ${row.status === "praying" ? "selected" : ""}>Praying</option>
                 <option value="answered" ${row.status === "answered" ? "selected" : ""}>Answered</option>
@@ -429,7 +451,7 @@ async function renderMembersTable() {
             <td>${escapeHtmlA(row.date_of_birth) || "—"}</td>
             <td class="wrap">${escapeHtmlA(row.home_address) || "—"}</td>
             <td>
-              <select class="admin-btn-sm" onchange="updateMemberStatus('${row.id}', this.value)" style="background:#222;color:#fff;">
+              <select class="admin-btn-sm" onchange="updateMemberStatus('${row.id}', this.value)">
                 <option value="new" ${row.status === "new" ? "selected" : ""}>New</option>
                 <option value="contacted" ${row.status === "contacted" ? "selected" : ""}>Contacted</option>
                 <option value="active" ${row.status === "active" ? "selected" : ""}>Active</option>
@@ -476,7 +498,7 @@ async function renderMinistryRegTable() {
             <td class="wrap">${escapeHtmlA(row.skills_experience)}</td>
             <td>${escapeHtmlA(row.availability)}</td>
             <td>
-              <select class="admin-btn-sm" onchange="updateMinistryRegStatus('${row.id}', this.value)" style="background:#222;color:#fff;">
+              <select class="admin-btn-sm" onchange="updateMinistryRegStatus('${row.id}', this.value)">
                 <option value="new" ${row.status === "new" ? "selected" : ""}>New</option>
                 <option value="contacted" ${row.status === "contacted" ? "selected" : ""}>Contacted</option>
                 <option value="approved" ${row.status === "approved" ? "selected" : ""}>Approved</option>
