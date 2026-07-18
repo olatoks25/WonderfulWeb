@@ -977,6 +977,55 @@
     margin-bottom: 1.25rem;
     line-height: 1.6;
   }
+
+  /* ─── BANK ACCOUNT LIST (give.html) ─────────────────── */
+  .bank-account-name { margin-bottom: 1rem !important; }
+  .bank-account-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .bank-account-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface-2);
+    border: 1px solid var(--gold-pale);
+    border-radius: var(--radius);
+    padding: 0.7rem 0.9rem;
+  }
+  .bank-account-info { display: flex; flex-direction: column; gap: 0.15rem; }
+  .bank-account-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .bank-account-number {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--purple-deep);
+    letter-spacing: 0.03em;
+  }
+  .copy-acc-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-pale);
+    background: var(--white);
+    color: var(--gold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+  .copy-acc-btn:hover { background: var(--gold); color: var(--white); }
+  .copy-acc-btn.copied { background: #2a7a4e; border-color: #2a7a4e; color: #fff; }
+  [data-theme="light"] .bank-account-item { background: #FBF5F3; border-color: rgba(139,0,0,0.12); }
+  [data-theme="light"] .copy-acc-btn { background: #fff; border-color: rgba(139,0,0,0.15); }
   
   /* ─── TESTIMONIES ───────────────────────────────────── */
   .testimonies-slider { position: relative; overflow: hidden; }
@@ -2296,10 +2345,25 @@
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--radius-lg);
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.5rem 2rem;
     text-align: center;
     transition: var(--transition);
+    overflow: hidden;
   }
+  .callout-img {
+    margin: -1.5rem -1.5rem 1.25rem;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    overflow: hidden;
+    aspect-ratio: 3 / 5;
+  }
+  .callout-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .callout-card:hover .callout-img img { transform: scale(1.05); }
   .callout-card:hover {
     transform: translateY(-6px);
     border-color: var(--purple-mid);

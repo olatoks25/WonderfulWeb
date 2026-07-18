@@ -323,23 +323,23 @@ document.getElementById("sendWhatsappBtn")?.addEventListener("click", () => {
 /* ──────────────────────────────────────────────────
    9. COPY BANK ACCOUNT NUMBER
    ────────────────────────────────────────────────── */
-const copyBtn = document.getElementById("copyAccBtn");
+document.querySelectorAll(".copy-acc-btn").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const accountNumber = btn.dataset.account;
+    if (!accountNumber || !navigator.clipboard) return;
 
-copyBtn?.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const accountNumber = "1234567890";
-  if (navigator.clipboard) {
     navigator.clipboard.writeText(accountNumber).then(() => {
-      const original = copyBtn.textContent;
-      copyBtn.textContent = "✓ Copied!";
-      copyBtn.style.background = "#2a7a4e";
+      const icon = btn.querySelector("i");
+      const originalClass = icon.className;
+      icon.className = "fa-solid fa-check";
+      btn.classList.add("copied");
       setTimeout(() => {
-        copyBtn.textContent = original;
-        copyBtn.style.background = "";
+        icon.className = originalClass;
+        btn.classList.remove("copied");
       }, 2000);
     });
-  }
+  });
 });
 
 
