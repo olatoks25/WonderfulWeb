@@ -209,6 +209,24 @@ async function loadNextEvent() {
 }
 
 /* ──────────────────────────────────────────────────
+   LOAD PUBLISHED TESTIMONIES (for about.html)
+   ────────────────────────────────────────────────── */
+async function loadTestimonies() {
+  if (!hasSupabase()) return [];
+  const { data, error } = await supabaseClient
+    .from("testimonies")
+    .select("*")
+    .eq("published", true)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) {
+    console.error("Load testimonies error:", error.message);
+    return [];
+  }
+  return data || [];
+}
+
+/* ──────────────────────────────────────────────────
    HELPERS
    ────────────────────────────────────────────────── */
 function formatEventDate(dateStr) {

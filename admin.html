@@ -107,6 +107,7 @@
         <button class="admin-tab-btn" data-panel="panel-prayer">Prayer Requests</button>
         <button class="admin-tab-btn" data-panel="panel-giving">Giving Records</button>
         <button class="admin-tab-btn" data-panel="panel-members">Members</button>
+        <button class="admin-tab-btn" data-panel="panel-testimonies">Testimonies</button>
       </div>
 
       <!-- CONTACT MESSAGES -->
@@ -224,6 +225,40 @@
           <button class="btn btn-outline btn-sm" onclick="refreshPanel('members')"><i class="fa-solid fa-rotate"></i> Refresh</button>
         </div>
         <div class="admin-table-wrap"><div id="membersTableHost"><p class="admin-empty">Loading…</p></div></div>
+      </div>
+
+      <!-- TESTIMONIES -->
+      <div class="admin-panel" id="panel-testimonies">
+        <div class="admin-form-card">
+          <h3>Add New Testimony</h3>
+          <form id="testimonyForm">
+            <div class="admin-form-grid">
+              <div><label>Full Name</label><input type="text" id="tmName" required /></div>
+              <div><label>Role / Status label</label><input type="text" id="tmRole" placeholder="e.g. Member since 2024" /></div>
+              <div><label>Star Rating</label>
+                <select id="tmStars">
+                  <option value="5" selected>★★★★★ (5)</option>
+                  <option value="4">★★★★☆ (4)</option>
+                  <option value="3">★★★☆☆ (3)</option>
+                  <option value="2">★★☆☆☆ (2)</option>
+                  <option value="1">★☆☆☆☆ (1)</option>
+                </select>
+              </div>
+              <div><label>Photo URL (optional)</label><input type="text" id="tmPhoto" placeholder="https://... or leave blank for initials" /></div>
+              <div style="grid-column:1/-1;"><label>Testimony</label><textarea id="tmText" rows="3" required></textarea></div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-top:1.4rem;">
+                <input type="checkbox" id="tmPublished" style="width:auto;" checked />
+                <label for="tmPublished" style="margin:0;">Published (visible on the site)</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gold">Add Testimony</button>
+          </form>
+        </div>
+        <div class="admin-actions-row">
+          <h3 style="color:#fff;font-family:var(--font-display);">All Testimonies</h3>
+          <button class="btn btn-outline btn-sm" onclick="refreshPanel('testimonies')"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div class="admin-table-wrap"><div id="testimoniesTableHost"><p class="admin-empty">Loading…</p></div></div>
       </div>
 
     </div>

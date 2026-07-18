@@ -122,6 +122,7 @@ function loadAllPanels() {
   refreshPanel("giving");
   refreshPanel("members");
   refreshPanel("ministryReg");
+  refreshPanel("testimonies");
 }
 
 async function refreshPanel(name) {
@@ -134,6 +135,7 @@ async function refreshPanel(name) {
     giving: renderGivingTable,
     members: renderMembersTable,
     ministryReg: renderMinistryRegTable,
+    testimonies: renderTestimoniesTable,
   };
   if (fns[name]) await fns[name]();
 }
@@ -515,6 +517,64 @@ async function renderMinistryRegTable() {
 async function updateMinistryRegStatus(id, status) {
   await supabaseClient.from("ministry_registrations").update({ status }).eq("id", id);
   renderMinistryRegTable();
+}
+
+/* ──────────────────────────────────────────────────
+   9. TESTIMONIES
+   ────────────────────────────────────────────────── */
+document.getElementById("testimonyForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { error } = await supabaseClient.from("testimonies").insert([{
+    full_name: document.getElementById("tmName").value.trim(),
+    role_label: document.getElementById("tmRole").value.trim() || null,
+    testimony_text: document.getElementById("tmText").value.trim(),
+    star_rating: parseInt(document.getElementById("tmStars").value, 10),
+    photo_url: document.getElementById("tmPhoto").value.trim() || null,
+    published: document.getElementById("tmPublished").checked,
+  }]);
+  if (error) { alert("Error adding testimony: " + error.message); return; }
+  e.target.reset();
+  document.getElementById("tmPublished").checked = true;
+  renderTestimoniesTable();
+});
+
+async function renderTestimoniesTable() {
+  const host = document.getElementById("testimoniesTableHost");
+  const { data, error } = await supabaseClient
+    .from("testimonies")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) { host.innerHTML = `<p class="admin-empty">Error loading: ${escapeHtmlA(error.message)}</p>`; return; }
+  if (!data.length) { host.innerHTML = `<p class="admin-empty">No testimonies yet.</p>`; return; }
+
+  host.innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Role/Status</th><th>Testimony</th><th>Stars</th><th>Photo?</th><th>Published</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td>${escapeHtmlA(row.full_name)}</td>
+            <td>${escapeHtmlA(row.role_label)}</td>
+            <td class="wrap">${escapeHtmlA(row.testimony_text)}</td>
+            <td>${"★".repeat(row.star_rating || 5)}</td>
+            <td>${row.photo_url ? "✅" : "—"}</td>
+            <td>${row.published ? "✅" : "🚫"}</td>
+            <td>
+              <button class="admin-btn-sm" onclick="toggleTestimonyPublished('${row.id}', ${row.published})">${row.published ? "Unpublish" : "Publish"}</button>
+              <button class="admin-btn-sm danger" onclick="deleteRow('testimonies','${row.id}','testimonies')">Delete</button>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+async function toggleTestimonyPublished(id, current) {
+  await supabaseClient.from("testimonies").update({ published: !current }).eq("id", id);
+  renderTestimoniesTable();
 }
 
 /* ──────────────────────────────────────────────────

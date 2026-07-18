@@ -133,8 +133,11 @@ revealElements.forEach(el => revealObserver.observe(el));
 
 /* ──────────────────────────────────────────────────
    6. TESTIMONIES SLIDER
+   Called explicitly (by about-page.js) once testimony
+   cards have been rendered into the DOM — not auto-run,
+   since the cards now load dynamically from Supabase.
    ────────────────────────────────────────────────── */
-(function initSlider() {
+function initTestimonySlider() {
   const track   = document.getElementById("testimoniesTrack");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
@@ -144,6 +147,7 @@ revealElements.forEach(el => revealObserver.observe(el));
 
   const cards      = track.querySelectorAll(".testimony-card");
   const totalCards = cards.length;
+  if (!totalCards) return;
   let   current    = 0;
   let   autoTimer;
 
@@ -203,7 +207,7 @@ revealElements.forEach(el => revealObserver.observe(el));
 
   goTo(0);
   startAuto();
-})();
+}
 
 
 /* ──────────────────────────────────────────────────

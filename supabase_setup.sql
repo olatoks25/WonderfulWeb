@@ -476,6 +476,58 @@ on conflict do nothing;
 
 
 -- ================================================================
+-- 10. TESTIMONIES (member testimonials shown on about.html)
+-- ================================================================
+create table if not exists testimonies (
+  id             uuid primary key default gen_random_uuid(),
+  full_name      text not null,
+  role_label     text,               -- e.g. "Member since 2024"
+  testimony_text text not null,
+  star_rating    integer default 5,
+  photo_url      text,
+  published      boolean default true,
+  display_order  integer default 0,
+  created_at     timestamptz default now()
+);
+
+alter table testimonies enable row level security;
+
+drop policy if exists "Public can view published testimonies" on testimonies;
+create policy "Public can view published testimonies"
+  on testimonies for select to anon using (published = true);
+
+drop policy if exists "Admins can view all testimonies" on testimonies;
+create policy "Admins can view all testimonies"
+  on testimonies for select to authenticated using (true);
+
+drop policy if exists "Admins can insert testimonies" on testimonies;
+create policy "Admins can insert testimonies"
+  on testimonies for insert to authenticated with check (true);
+
+drop policy if exists "Admins can update testimonies" on testimonies;
+create policy "Admins can update testimonies"
+  on testimonies for update to authenticated using (true);
+
+drop policy if exists "Admins can delete testimonies" on testimonies;
+create policy "Admins can delete testimonies"
+  on testimonies for delete to authenticated using (true);
+
+create index if not exists idx_testimonies_order on testimonies (display_order asc, created_at asc);
+
+-- Migrating the 6 testimonies that used to be hardcoded in about.html,
+-- so nothing is lost when switching to the admin-managed version.
+insert into testimonies (full_name, role_label, testimony_text, star_rating, photo_url, display_order)
+values
+  ('Tobi Olatokun', 'Member since 2024', 'I came to Wonderful Mega Church hopeful and expectant. I found healing, purpose, and a family that truly cares. My life has never been the same. God is real!', 5, 'images/Tobi.jpeg', 1),
+  ('Tolu Ayeyemi', 'Member since 2024', 'I''ve grown in my faith, and I''m closer than ever. I''m grateful for a place where the Word is taught clearly and people genuinely care.', 5, 'images/Tolu.jpeg', 2),
+  ('Ayo Ayeyemi', 'Member since 2024', 'I thank God for standing by me and my family during our trial times. The prayers and faith of this church community stood with us. Wonderful Mega truly lives up to its name!', 5, 'images/Ayo.jpeg', 3),
+  ('Tosin Olatokun', 'Member since 2024', 'The ministry here is exceptional. I have grown spiritually more in the past two years than in my entire life. The sermons are deep, practical, and life-changing.', 5, 'Images/tosin.jpeg', 4),
+  ('Glory Ayemi', 'Member since 2024', 'Church used to feel routine for me. Here, I learned to pray and study the Bible with understanding. For the first time, my relationship with God feels personal and real.', 5, 'Images/glory.JPG', 5),
+  ('Opeyemi', 'Member since 2025', 'I''m grateful for a church that teaches the Word practically and stands with you in prayer.', 5, 'images/Opeyemi.jpeg', 6)
+on conflict do nothing;
+
+
+-- ================================================================
 -- DONE. NEXT STEPS:
 -- 1. Supabase Dashboard → Authentication → Users → Add User
 --    Create your admin email/password (this logs into admin.html)
