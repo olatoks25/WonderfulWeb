@@ -1059,6 +1059,28 @@
     font-size: 0.85rem;
     letter-spacing: 0.05em;
   }
+
+  /* ─── PUBLIC TESTIMONY SUBMISSION FORM ──────────────── */
+  .testimony-form-wrap {
+    max-width: 600px;
+    margin: 4rem auto 0;
+    text-align: center;
+  }
+  .testimony-form-title {
+    font-size: 1.75rem;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+  .testimony-form-title em { font-style: italic; color: var(--gold-light); }
+  .testimony-form-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+  .testimony-form { text-align: left; }
+  [data-theme="light"] .testimony-form-title { color: #1A0A0A; }
+  [data-theme="light"] .testimony-form-sub { color: #5A3A3A; }
   
   /* Slider controls */
   .slider-controls {

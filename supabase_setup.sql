@@ -514,6 +514,24 @@ create policy "Admins can delete testimonies"
 
 create index if not exists idx_testimonies_order on testimonies (display_order asc, created_at asc);
 
+-- Public submission function: anyone can submit a testimony, but it
+-- always lands as unpublished so an admin reviews it before it's
+-- shown on the site. Same security-definer pattern used elsewhere
+-- so anon never needs SELECT rights on testimonies awaiting review.
+create or replace function submit_testimony(
+  p_full_name text, p_role_label text, p_testimony_text text, p_star_rating integer
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into testimonies (full_name, role_label, testimony_text, star_rating, published)
+  values (p_full_name, p_role_label, p_testimony_text, coalesce(p_star_rating, 5), false);
+$$;
+
+grant execute on function submit_testimony(text, text, text, integer) to anon;
+
 -- Migrating the 6 testimonies that used to be hardcoded in about.html,
 -- so nothing is lost when switching to the admin-managed version.
 insert into testimonies (full_name, role_label, testimony_text, star_rating, photo_url, display_order)

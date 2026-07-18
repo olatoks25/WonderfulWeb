@@ -209,6 +209,21 @@ async function loadNextEvent() {
 }
 
 /* ──────────────────────────────────────────────────
+   PUBLIC TESTIMONY SUBMISSION (goes in unpublished, awaiting review)
+   ────────────────────────────────────────────────── */
+async function saveTestimony(d) {
+  if (!hasSupabase()) return { error: "no-client" };
+  const { error } = await supabaseClient.rpc("submit_testimony", {
+    p_full_name:      d.fullName,
+    p_role_label:     d.roleLabel || null,
+    p_testimony_text: d.testimonyText,
+    p_star_rating:    d.starRating || 5,
+  });
+  if (error) console.error("Testimony submission error:", error.message);
+  return { error };
+}
+
+/* ──────────────────────────────────────────────────
    LOAD PUBLISHED TESTIMONIES (for about.html)
    ────────────────────────────────────────────────── */
 async function loadTestimonies() {

@@ -199,6 +199,27 @@
           <button class="slider-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
       </div>
+
+      <div class="testimony-form-wrap reveal">
+        <h3 class="testimony-form-title">Share <em>Your</em> Testimony</h3>
+        <p class="testimony-form-sub">Has God done something in your life through this church? We'd love to hear it — your story could encourage someone else.</p>
+        <form class="testimony-form contact-form" id="testimonyPublicForm">
+          <div class="form-group">
+            <label for="tpName">Full Name</label>
+            <input type="text" id="tpName" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="tpRole">How would you describe yourself?</label>
+            <input type="text" id="tpRole" placeholder="e.g. Member since 2024" />
+          </div>
+          <div class="form-group">
+            <label for="tpText">Your Testimony</label>
+            <textarea id="tpText" rows="4" placeholder="Tell us what God has done…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold full-width" id="testimonyPublicSubmitBtn">Submit Testimony</button>
+          <div class="form-success" id="testimonyPublicSuccess">✦ Thank you for sharing! Your testimony will appear here once it's reviewed.</div>
+        </form>
+      </div>
     </div>
   </section>
 

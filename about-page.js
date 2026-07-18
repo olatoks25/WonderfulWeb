@@ -63,3 +63,37 @@ async function renderTestimonies() {
 }
 
 renderTestimonies();
+
+/* ──────────────────────────────────────────────────
+   PUBLIC TESTIMONY SUBMISSION
+   ────────────────────────────────────────────────── */
+const testimonyPublicForm      = document.getElementById("testimonyPublicForm");
+const testimonyPublicSuccess   = document.getElementById("testimonyPublicSuccess");
+const testimonyPublicSubmitBtn = document.getElementById("testimonyPublicSubmitBtn");
+
+testimonyPublicForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  testimonyPublicSubmitBtn.disabled = true;
+  testimonyPublicSubmitBtn.textContent = "Submitting…";
+
+  const { error } = await saveTestimony({
+    fullName:      document.getElementById("tpName").value.trim(),
+    roleLabel:     document.getElementById("tpRole").value.trim(),
+    testimonyText: document.getElementById("tpText").value.trim(),
+    starRating:    5,
+  });
+
+  testimonyPublicSubmitBtn.disabled = false;
+  testimonyPublicSubmitBtn.textContent = "Submit Testimony";
+
+  if (error) {
+    alert("Something went wrong submitting your testimony. Please try again.");
+    return;
+  }
+
+  if (testimonyPublicSuccess) {
+    testimonyPublicSuccess.style.display = "block";
+    setTimeout(() => { testimonyPublicSuccess.style.display = "none"; }, 6000);
+  }
+  testimonyPublicForm.reset();
+});
