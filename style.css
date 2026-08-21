@@ -307,9 +307,21 @@
   .hamburger {
     display: none;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 5px;
+    width: 42px;
+    height: 42px;
     padding: 4px;
     margin-left: auto;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: var(--transition);
   }
   .hamburger span {
     display: block;
@@ -1956,6 +1968,10 @@
   [data-theme="light"] .nav-link        { color: rgba(60,10,10,0.8); }
   [data-theme="light"] .nav-link:hover,
   [data-theme="light"] .nav-link.active { color: #6B0000; }
+  [data-theme="light"] .hamburger {
+    background: rgba(139,0,0,0.08);
+    border-color: rgba(139,0,0,0.22);
+  }
   [data-theme="light"] .hamburger span  { background: #6B0000; }
   
   /* Mobile nav panel in light mode */
@@ -2158,8 +2174,11 @@
     width: 52px;
     height: 28px;
     background: rgba(255,255,255,0.12);
-    border: 1.5px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255,255,255,0.25);
     border-radius: 50px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15);
     display: flex;
     align-items: center;
     justify-content: space-between;
