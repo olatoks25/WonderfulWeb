@@ -645,3 +645,120 @@ filterBtns.forEach(btn => {
     });
   });
 });
+
+/* ──────────────────────────────────────────────────
+   FLOATING DRAGGABLE DOCK
+   Press-hold-drag the mobile dock anywhere on screen;
+   snaps to the nearest edge on release and remembers
+   its position (per-device, via localStorage).
+   ────────────────────────────────────────────────── */
+(function initFloatingDock() {
+  const dock = document.getElementById("floatingDock");
+  if (!dock) return;
+
+  const STORAGE_KEY = "wmc-dock-pos";
+  const DRAG_THRESHOLD = 8; // px of movement before a press counts as a drag, not a tap
+  const EDGE_MARGIN = 10;
+
+  let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+  let isPointerDown = false, moved = false;
+
+  function clamp(val, min, max) { return Math.max(min, Math.min(val, max)); }
+
+  function applyPosition(left, top) {
+    const rect = dock.getBoundingClientRect();
+    const maxLeft = window.innerWidth - rect.width - EDGE_MARGIN;
+    const maxTop  = window.innerHeight - rect.height - EDGE_MARGIN;
+    left = clamp(left, EDGE_MARGIN, Math.max(EDGE_MARGIN, maxLeft));
+    top  = clamp(top, EDGE_MARGIN, Math.max(EDGE_MARGIN, maxTop));
+    dock.style.left = left + "px";
+    dock.style.top = top + "px";
+    dock.style.bottom = "auto";
+    dock.style.transform = "none";
+    return { left, top };
+  }
+
+  function snapToEdge() {
+    const rect = dock.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const snapLeft = centerX < window.innerWidth / 2
+      ? EDGE_MARGIN
+      : window.innerWidth - rect.width - EDGE_MARGIN;
+    const finalTop = clamp(rect.top, EDGE_MARGIN, window.innerHeight - rect.height - EDGE_MARGIN);
+    dock.style.left = snapLeft + "px";
+    dock.style.top = finalTop + "px";
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ left: snapLeft, top: finalTop }));
+  }
+
+  // Restore a previously saved position (if any) once layout has settled
+  requestAnimationFrame(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && typeof saved.left === "number" && typeof saved.top === "number") {
+        applyPosition(saved.left, saved.top);
+      }
+    } catch (e) { /* ignore malformed/missing saved position */ }
+  });
+
+  function onPointerDown(e) {
+    isPointerDown = true;
+    moved = false;
+    startX = e.clientX;
+    startY = e.clientY;
+    const rect = dock.getBoundingClientRect();
+    startLeft = rect.left;
+    startTop = rect.top;
+    dock.classList.add("dragging");
+  }
+
+  function onPointerMove(e) {
+    if (!isPointerDown) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (!moved && (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD)) {
+      moved = true;
+    }
+    if (moved) {
+      e.preventDefault();
+      applyPosition(startLeft + dx, startTop + dy);
+    }
+  }
+
+  function onPointerUp() {
+    if (!isPointerDown) return;
+    isPointerDown = false;
+    dock.classList.remove("dragging");
+
+    if (moved) {
+      snapToEdge();
+      // Swallow the click that follows a drag so it doesn't
+      // accidentally trigger navigation on the item under the finger.
+      const swallowClick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+      };
+      document.addEventListener("click", swallowClick, { capture: true, once: true });
+      setTimeout(() => document.removeEventListener("click", swallowClick, { capture: true }), 300);
+    }
+    moved = false;
+  }
+
+  dock.addEventListener("pointerdown", onPointerDown);
+  document.addEventListener("pointermove", onPointerMove, { passive: false });
+  document.addEventListener("pointerup", onPointerUp);
+  document.addEventListener("pointercancel", onPointerUp);
+
+  // Keep the dock on-screen if the viewport size changes (rotation, resize)
+  window.addEventListener("resize", () => {
+    if (dock.style.left) {
+      const rect = dock.getBoundingClientRect();
+      applyPosition(rect.left, rect.top);
+    }
+  });
+
+  // The circular button opens the existing full nav menu
+  document.getElementById("dockMenuBtn")?.addEventListener("click", (e) => {
+    if (moved) { e.preventDefault(); return; }
+    document.getElementById("hamburger")?.click();
+  });
+})();

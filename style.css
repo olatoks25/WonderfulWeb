@@ -1835,6 +1835,87 @@
     0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.5); }
     50%      { box-shadow: 0 4px 35px rgba(37,211,102,0.85), 0 0 0 8px rgba(37,211,102,0.1); }
   }
+
+  /* ─── FLOATING DRAGGABLE DOCK (mobile) ──────────────── */
+  .floating-dock {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    z-index: 950;
+    display: none;
+    align-items: center;
+    gap: 0.65rem;
+    touch-action: none;
+  }
+  @media (max-width: 900px) {
+    .floating-dock { display: flex; }
+  }
+  .dock-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    background: rgba(20, 14, 14, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 0.55rem 0.7rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    cursor: grab;
+  }
+  .floating-dock.dragging .dock-pill,
+  .floating-dock.dragging .dock-menu-btn { cursor: grabbing; }
+  .dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.4rem 0.6rem;
+    border-radius: 14px;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    transition: background 0.2s ease;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+  }
+  .dock-item i { font-size: 1.05rem; }
+  .dock-item span { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.02em; }
+  .dock-item:hover, .dock-item:active { background: rgba(255,255,255,0.14); }
+  .dock-item-accent i { color: var(--gold-light); }
+  .dock-menu-btn {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: rgba(20, 14, 14, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .floating-dock.dragging { transition: none !important; }
+  .floating-dock:not(.dragging) { transition: left 0.35s cubic-bezier(0.4,0,0.2,1), bottom 0.35s cubic-bezier(0.4,0,0.2,1), top 0.35s cubic-bezier(0.4,0,0.2,1); }
+
+  [data-theme="light"] .dock-pill,
+  [data-theme="light"] .dock-menu-btn {
+    background: rgba(255,255,255,0.55);
+    border-color: rgba(139,0,0,0.15);
+    box-shadow: 0 8px 32px rgba(139,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  [data-theme="light"] .dock-item { color: rgba(60,10,10,0.85); }
+  [data-theme="light"] .dock-item:hover,
+  [data-theme="light"] .dock-item:active { background: rgba(139,0,0,0.08); }
+  [data-theme="light"] .dock-menu-btn { color: #6B0000; }
   
   /* ─── 18. EVENT CARD date badge pulse ──────────────── */
   .event-date-badge {
