@@ -1843,13 +1843,10 @@
     bottom: 1.5rem;
     transform: translateX(-50%);
     z-index: 950;
-    display: none;
+    display: flex;
     align-items: center;
     gap: 0.65rem;
     touch-action: none;
-  }
-  @media (max-width: 900px) {
-    .floating-dock { display: flex; }
   }
   .dock-pill {
     display: flex;
